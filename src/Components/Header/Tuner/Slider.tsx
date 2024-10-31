@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 
 
 interface PrettySliderProps {
-  inputColor: string;
+  inputcolor: string;
 }
 interface SliderProps {
   color: string;
@@ -17,8 +17,8 @@ const Input = styled(MuiInput)(() => ({
   width: 42,
 }));
 
-const PrettySlider = styled(Slider)<PrettySliderProps>(({ inputColor }) => ({
-  color: inputColor,
+const PrettySlider = styled(Slider)<PrettySliderProps>(({ inputcolor }) => ({
+  color: inputcolor,
   height: 8,
   '& .MuiSlider-track': {
     border: 'none',
@@ -43,7 +43,7 @@ const PrettySlider = styled(Slider)<PrettySliderProps>(({ inputColor }) => ({
     width: 32,
     height: 32,
     borderRadius: '50% 50% 50% 0',
-    backgroundColor: inputColor,
+    backgroundColor: inputcolor,
     transformOrigin: 'bottom left',
     transform: 'translate(50%, -100%) rotate(-45deg) scale(0)',
     '&::before': { display: 'none' },
@@ -76,22 +76,22 @@ function WrappedSlider({ color, content, children }: SliderProps) {
   };
 
   return (
-    <Box>
+    <Box sx={{ pr: 3 }}>
       <Typography gutterBottom >{content}</Typography>
-      <Grid2 container spacing={2} size={12}>
-        <Grid2 size={2}>
+      <Grid2 container spacing={2} size={10}>
+        <Grid2 size={1}>
           {children}
         </Grid2>
-        <Grid2 size={8}>
+        <Grid2 size={10}>
           <PrettySlider
-            inputColor={color}
+            inputcolor={color}
             valueLabelDisplay="auto"
             value={typeof value === 'number' ? value : 50}
             onChange={handleSliderChange}
             aria-label="pretto slider"
           />
         </Grid2>
-        <Grid2 size={2}>
+        <Grid2 size={1}>
           <Input
             value={value}
             size="small"

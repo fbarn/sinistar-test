@@ -1,5 +1,6 @@
-import { APIProvider, Map, useMap } from '@vis.gl/react-google-maps';
 import Box from '@mui/material/Box';
+
+import { Map } from '@vis.gl/react-google-maps';
 
 function APIMap() {
 

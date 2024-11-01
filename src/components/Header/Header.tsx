@@ -1,6 +1,7 @@
 import { AppBar, Box, Toolbar } from '@mui/material';
-import SearchBar from './Search/Search';
-import Tuner from './Tuner/Tuner';
+
+import SearchBar from './Search/SearchBar';
+import TunerIcon from './Tuner/TunerIcon';
 
 interface HeaderProps {
   height: string;
@@ -13,7 +14,7 @@ function Header({ height }: HeaderProps) {
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <SearchBar />
 
-          <Tuner />
+          <TunerIcon />
         </Toolbar>
       </AppBar>
     </Box>

@@ -1,28 +1,15 @@
-import { styled, alpha } from '@mui/material/styles';
-import { Autocomplete, Grid2, InputBase, Typography } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import React, { useRef } from 'react';
-import { useMapsLibrary } from '@vis.gl/react-google-maps';
+
+import { Autocomplete, Grid2, InputBase, Typography } from '@mui/material';
+import { styled, alpha } from '@mui/material/styles';
 import { debounce } from '@mui/material/utils';
+import { LocationOn, Search } from '@mui/icons-material';
 
+import { useMapsLibrary } from '@vis.gl/react-google-maps';
 
-interface MainTextMatchedSubstrings {
-  offset: number;
-  length: number;
-}
-interface StructuredFormatting {
-  main_text: string;
-  secondary_text: string;
-  main_text_matched_substrings?: readonly MainTextMatchedSubstrings[];
-}
-interface PlaceType {
-  description: string;
-  structured_formatting: StructuredFormatting;
-}
+import type { PlaceType } from 'shared/lib/types'
 
-
-const Search = styled('div')(({ theme }) => ({
+const SearchWrapper = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.black, 0.10),
@@ -113,13 +100,13 @@ function SearchBar() {
     return () => {
       active = false;
     };
-  }, [value, inputValue, fetch]);
+  }, [value, inputValue, fetch, googleMapsPlaces]);
 
 
   return (
-    <Search>
+    <SearchWrapper>
       <SearchIconWrapper>
-        <SearchIcon />
+        <Search />
       </SearchIconWrapper>
       <Autocomplete
         getOptionLabel={(option) => option.description}
@@ -130,11 +117,12 @@ function SearchBar() {
         filterSelectedOptions
         value={value}
         noOptionsText="No locations"
-        onChange={(event: any, newValue) => {
+        onChange={(_event: any, newValue) => {
           setOptions(newValue ? [newValue, ...options] : options);
           setValue(newValue);
+          console.log(newValue)
         }}
-        onInputChange={(event, newInputValue) => {
+        onInputChange={(_event, newInputValue) => {
           setInputValue(newInputValue);
         }}
         renderInput={(params) => {
@@ -155,7 +143,7 @@ function SearchBar() {
             <li key={key} {...optionProps}>
               <Grid2 container sx={{ alignItems: 'center' }}>
                 <Grid2 sx={{ display: 'flex', width: 44 }}>
-                  <LocationOnIcon sx={{ color: 'text.secondary' }} />
+                  <LocationOn sx={{ color: 'text.secondary' }} />
                 </Grid2>
                 <Grid2 sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
                   {option.structured_formatting.main_text}
@@ -168,7 +156,7 @@ function SearchBar() {
           );
         }}
       />
-    </Search>
+    </SearchWrapper>
   )
 }
 

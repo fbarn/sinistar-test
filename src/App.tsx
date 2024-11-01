@@ -1,9 +1,12 @@
 import React from 'react';
-import './App.css';
-import Header from './Components/Header/Header';
-import APIMap from './Components/Map/APIMap';
+
 import Box from '@mui/material/Box';
+
 import { APIProvider } from '@vis.gl/react-google-maps';
+
+import './App.css';
+import Header from './components/Header/Header';
+import APIMap from './components/Map/APIMap';
 
 function App() {
   return (

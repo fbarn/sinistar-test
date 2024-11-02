@@ -7,7 +7,6 @@ import { LocationOn, Search } from '@mui/icons-material';
 
 import { useMapsLibrary } from '@vis.gl/react-google-maps';
 
-import type { PlaceType } from 'shared/lib/types'
 
 const SearchWrapper = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -40,21 +39,27 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   justifyContent: 'center',
 }));
 
-function SearchBar() {
+interface SearchBarProps {
+  onSearchChange: (coords: google.maps.GeocoderGeometry | null) => void;
+}
+
+function SearchBar({ onSearchChange }: SearchBarProps) {
   const autocompleteService = useRef(null as any);
+  const geocodeService = useRef(null as any)
 
-  const [value, setValue] = React.useState<PlaceType | null>(null);
+  const [value, setValue] = React.useState<google.maps.places.AutocompletePrediction | null>(null);
   const [inputValue, setInputValue] = React.useState('');
-  const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
-  const googleMapsPlaces = useMapsLibrary('places')
+  const [options, setOptions] = React.useState<readonly google.maps.places.AutocompletePrediction[]>([]);
+  const places = useMapsLibrary('places')
+  const geocoding = useMapsLibrary('geocoding')
 
 
-  const fetch = React.useMemo(
+  const fetchPlaces = React.useMemo(
     () =>
       debounce(
         (
           request: { input: string },
-          callback: (results?: readonly PlaceType[]) => void,
+          callback: (results?: readonly google.maps.places.AutocompletePrediction[]) => void,
         ) => {
           (autocompleteService.current as any).getPlacePredictions(
             request,
@@ -69,8 +74,8 @@ function SearchBar() {
   React.useEffect(() => {
     let active = true;
 
-    if (!autocompleteService.current && googleMapsPlaces !== null) {
-      autocompleteService.current = new googleMapsPlaces.AutocompleteService();
+    if (!autocompleteService.current && places !== null) {
+      autocompleteService.current = new places.AutocompleteService();
     }
     if (!autocompleteService.current) {
       return undefined;
@@ -81,9 +86,9 @@ function SearchBar() {
       return undefined;
     }
 
-    fetch({ input: inputValue }, (results?: readonly PlaceType[]) => {
+    fetchPlaces({ input: inputValue }, (results?: readonly google.maps.places.AutocompletePrediction[]) => {
       if (active) {
-        let newOptions: readonly PlaceType[] = [];
+        let newOptions: readonly google.maps.places.AutocompletePrediction[] = [];
 
         if (value) {
           newOptions = [value];
@@ -100,8 +105,52 @@ function SearchBar() {
     return () => {
       active = false;
     };
-  }, [value, inputValue, fetch, googleMapsPlaces]);
+  }, [value, inputValue, fetchPlaces, places]);
 
+  const fetchGeocode = React.useMemo(
+    () =>
+      debounce(
+        (
+          request: { placeId: string },
+          callback: (results?: readonly google.maps.GeocoderResult[]) => void,
+        ) => {
+          (geocodeService.current as any).geocode(
+            request,
+            callback,
+          );
+        },
+        400,
+      ),
+    [],
+  );
+
+  React.useEffect(() => {
+    let active = true;
+
+    if (!geocodeService.current && geocoding !== null) {
+      geocodeService.current = new geocoding.Geocoder();
+    }
+    if (!geocodeService.current) {
+      return undefined;
+    }
+
+    if (value === null) {
+      return undefined;
+    }
+
+    fetchGeocode({ placeId: value.place_id }, (results?: readonly google.maps.GeocoderResult[]) => {
+      if (active) {
+        if (results) {
+          let newPosition: google.maps.GeocoderGeometry = results[0]?.geometry;
+          onSearchChange(newPosition);
+        }
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [value, fetchGeocode, geocoding]);
 
   return (
     <SearchWrapper>
@@ -120,7 +169,6 @@ function SearchBar() {
         onChange={(_event: any, newValue) => {
           setOptions(newValue ? [newValue, ...options] : options);
           setValue(newValue);
-          console.log(newValue)
         }}
         onInputChange={(_event, newInputValue) => {
           setInputValue(newInputValue);

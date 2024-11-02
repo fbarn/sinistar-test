@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Box, Button, Divider, Drawer, Grid2, IconButton, Toolbar, Typography } from '@mui/material'
 import { CalendarMonth, ChevronRight, HourglassTop, Reviews, Straighten } from '@mui/icons-material';
 
-import TunerSlider from './Slider';
+import Slider from './Slider';
 
 
 interface TemporaryDrawerProps {
@@ -62,20 +62,22 @@ function WrappedDrawer({ open, toggleDrawer }: TemporaryDrawerProps) {
       </Box>
       <Divider />
       <Box sx={{ mx: 3, my: 3 }}>
-        <TunerSlider content='Distance from Current Home' ><Straighten /></TunerSlider>
-        <TunerSlider content='Response Rate' > <HourglassTop /></TunerSlider>
-        <TunerSlider content='Review Score' > <Reviews /></TunerSlider>
-        <TunerSlider content='Extension Flexibility' > <CalendarMonth /></TunerSlider>
-        <Grid2 container spacing={2}>
-          <Grid2>
-            <Button sx={{ maxWidth: '55px', minWidth: '55px' }} variant="contained">Save</Button>
+        <Slider content='Distance from Current Home' ><Straighten /></Slider>
+        <Slider content='Response Rate' > <HourglassTop /></Slider>
+        <Slider content='Review Score' > <Reviews /></Slider>
+        <Slider content='Extension Flexibility' > <CalendarMonth /></Slider>
+        <Box sx={{ mt: 3 }}>
+          <Grid2 container spacing={2}>
+            <Grid2>
+              <Button sx={{ maxWidth: '55px', minWidth: '55px' }} variant="contained">Save</Button>
+            </Grid2>
+            <Grid2>
+              <Button variant="outlined" sx={{ color: "black", borderColor: "black", maxWidth: '55px', minWidth: '55px' }}>Reset</Button>
+            </Grid2>
           </Grid2>
-          <Grid2>
-            <Button variant="outlined" sx={{ color: "black", borderColor: "black", maxWidth: '55px', minWidth: '55px' }}>Reset</Button>
-          </Grid2>
-        </Grid2>
+        </Box>
       </Box>
-    </DrawerWrapper>
+    </DrawerWrapper >
   );
 }
 

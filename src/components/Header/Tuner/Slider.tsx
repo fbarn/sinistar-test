@@ -14,12 +14,7 @@ const InputWrapper = styled(Input)(({ theme }) => ({
 }));
 
 const IconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(1.1, 2, 0, 0),
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+  padding: theme.spacing(1.1, 0, 0, 0),
 }));
 
 const SliderWrapper = styled(Slider)(({ theme }) => ({

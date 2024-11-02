@@ -5,15 +5,15 @@ import TunerIcon from './Tuner/TunerIcon';
 
 interface HeaderProps {
   height: string;
+  onSearchChange: (coords: google.maps.GeocoderGeometry | null) => void;
 }
 
-function Header({ height }: HeaderProps) {
+function Header({ height, onSearchChange }: HeaderProps) {
   return (
     <Box height={height} sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          <SearchBar />
-
+          <SearchBar onSearchChange={onSearchChange} />
           <TunerIcon />
         </Toolbar>
       </AppBar>

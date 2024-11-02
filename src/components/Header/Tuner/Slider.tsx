@@ -3,11 +3,6 @@ import React from 'react';
 import { Box, Grid2, Input, Slider, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-interface SliderProps {
-  content: string;
-  children?: React.ReactNode;
-}
-
 const InputWrapper = styled(Input)(({ theme }) => ({
   padding: theme.spacing(0, 0, 0, 0),
   width: 55,
@@ -38,20 +33,6 @@ const SliderWrapper = styled(Slider)(({ theme }) => ({
         '0px 0px 1px 0px rgba(0,0,0,0.2), 0px 0px 0px 0px rgba(0,0,0,0.14), 0px 0px 1px 0px rgba(0,0,0,0.12)',
     },
   },
-  '& .MuiSlider-valueLabel': {
-    fontSize: 12,
-    fontWeight: 'normal',
-    top: -6,
-    backgroundColor: 'unset',
-    color: theme.palette.text.primary,
-    '&::before': {
-      display: 'none',
-    },
-    '& *': {
-      background: 'transparent',
-      color: '#000',
-    },
-  },
   '& .MuiSlider-track': {
     border: 'none',
     height: 5,
@@ -64,21 +45,27 @@ const SliderWrapper = styled(Slider)(({ theme }) => ({
   },
 }));
 
-function WrappedSlider({ content, children }: SliderProps) {
-  const [value, setValue] = React.useState(50);
+interface WrappedSliderProps {
+  content: string;
+  children?: React.ReactNode;
+  value: number;
+  onWeightChange: (weight: number) => void;
+}
+
+function WrappedSlider({ content, children, value, onWeightChange }: WrappedSliderProps) {
   const handleSliderChange = (_event: Event, newValue: number | number[]) => {
-    setValue(newValue as number);
+    onWeightChange(newValue as number);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value === '' ? 0 : Number(event.target.value));
+    onWeightChange(event.target.value === '' ? 0 : Number(event.target.value));
   };
 
   const handleBlur = () => {
     if (value < 0) {
-      setValue(0);
+      onWeightChange(0);
     } else if (value > 100) {
-      setValue(100);
+      onWeightChange(100);
     }
   };
 

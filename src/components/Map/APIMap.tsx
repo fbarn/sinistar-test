@@ -1,28 +1,30 @@
 import React from 'react';
 import { Box } from '@mui/material';
 
-import { AdvancedMarker, Map, useMap, useAdvancedMarkerRef } from '@vis.gl/react-google-maps';
+import { AdvancedMarker, Map, Pin, useMap, useAdvancedMarkerRef } from '@vis.gl/react-google-maps';
+import { Home } from 'shared/lib/types';
+
 
 interface APIMapProps {
   geometry: google.maps.GeocoderGeometry | null;
+  homes: Home[] | null;
 }
 
-function APIMap({ geometry }: APIMapProps) {
+function APIMap({ geometry, homes }: APIMapProps) {
 
   const map = useMap()
   const [markerRef, marker] = useAdvancedMarkerRef();
 
   React.useEffect(() => {
-    console.log(geometry);
-    console.log(geometry?.location?.lat());
-    console.log(geometry?.location?.lng());
     if (!map || !geometry || !marker) return;
 
     if (geometry?.viewport) {
       map.fitBounds(geometry?.viewport);
       map.setZoom(12);
     }
-    marker.position = geometry?.location;
+    if (geometry?.location) {
+      marker.position = geometry?.location;
+    }
   }, [map, geometry, marker]);
 
   return (
@@ -38,9 +40,21 @@ function APIMap({ geometry }: APIMapProps) {
         gestureHandling={'greedy'}
         disableDefaultUI={true}
       >
-        <AdvancedMarker ref={markerRef} position={null} />
+        <AdvancedMarker key={'my_home'} ref={markerRef} position={null} />
+        {homes?.map(({ latitude, longitude, id }) => (
+          <AdvancedMarker
+            key={id}
+            position={{ lat: latitude, lng: longitude }}
+          >
+            <Pin
+              background={'#edcc1f'}
+              glyphColor={'#000'}
+              borderColor={'#000'}
+            />
+          </AdvancedMarker>
+        ))}
       </Map>
-    </Box>
+    </Box >
   )
 }
 

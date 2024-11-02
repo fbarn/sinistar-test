@@ -4,8 +4,14 @@ import { Box, IconButton } from '@mui/material'
 import { Tune } from '@mui/icons-material';
 import Drawer from './Drawer';
 
+import { WeightContext } from 'shared/lib/types';
 
-function TunerIcon() {
+
+interface TunerProps {
+  weightContext: WeightContext;
+}
+
+function TunerIcon({ weightContext }: TunerProps) {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -25,7 +31,7 @@ function TunerIcon() {
           <Tune />
         </IconButton>
       </Box>
-      <Drawer open={open} toggleDrawer={toggleDrawer} />
+      <Drawer open={open} toggleDrawer={toggleDrawer} weightContext={weightContext} />
     </div >
   );
 }

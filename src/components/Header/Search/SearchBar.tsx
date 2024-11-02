@@ -150,7 +150,7 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
     return () => {
       active = false;
     };
-  }, [value, fetchGeocode, geocoding]);
+  }, [onSearchChange, value, fetchGeocode, geocoding]);
 
   return (
     <SearchWrapper>
@@ -193,7 +193,7 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
                 <Grid2 sx={{ display: 'flex', width: 44 }}>
                   <LocationOn sx={{ color: 'text.secondary' }} />
                 </Grid2>
-                <Grid2 sx={{ width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
+                <Grid2 sx={{ width: 'calc(100% - 44px)' }}>
                   {option.structured_formatting.main_text}
                   <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     {option.structured_formatting.secondary_text}

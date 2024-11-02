@@ -4,12 +4,8 @@ import { Box, Button, Divider, Drawer, Grid2, IconButton, Toolbar, Typography } 
 import { CalendarMonth, ChevronRight, HourglassTop, Reviews, Straighten } from '@mui/icons-material';
 
 import Slider from './Slider';
+import { WeightContext } from 'shared/lib/types';
 
-
-interface TemporaryDrawerProps {
-  open: boolean;
-  toggleDrawer: (newOpen: boolean) => () => void;
-}
 
 interface DrawerWrapperProps {
   open: boolean;
@@ -44,7 +40,13 @@ const DrawerWrapper: React.FC<DrawerWrapperProps> = ({ open, onClose, children }
   );
 };
 
-function WrappedDrawer({ open, toggleDrawer }: TemporaryDrawerProps) {
+interface WrappedDrawerProps {
+  open: boolean;
+  toggleDrawer: (newOpen: boolean) => () => void;
+  weightContext: WeightContext;
+}
+
+function WrappedDrawer({ open, toggleDrawer, weightContext }: WrappedDrawerProps) {
 
   return (
     <DrawerWrapper open={open} onClose={toggleDrawer(false)}>
@@ -62,20 +64,10 @@ function WrappedDrawer({ open, toggleDrawer }: TemporaryDrawerProps) {
       </Box>
       <Divider />
       <Box sx={{ mx: 3, my: 3 }}>
-        <Slider content='Distance from Current Home' ><Straighten /></Slider>
-        <Slider content='Response Rate' > <HourglassTop /></Slider>
-        <Slider content='Review Score' > <Reviews /></Slider>
-        <Slider content='Extension Flexibility' > <CalendarMonth /></Slider>
-        <Box sx={{ mt: 3 }}>
-          <Grid2 container spacing={2}>
-            <Grid2>
-              <Button sx={{ maxWidth: '55px', minWidth: '55px' }} variant="contained">Save</Button>
-            </Grid2>
-            <Grid2>
-              <Button variant="outlined" sx={{ color: "black", borderColor: "black", maxWidth: '55px', minWidth: '55px' }}>Reset</Button>
-            </Grid2>
-          </Grid2>
-        </Box>
+        <Slider content='Distance from Current Home' value={weightContext.distanceWeight} onWeightChange={weightContext.setDistanceWeight} ><Straighten /></Slider>
+        <Slider content='Review Score' value={weightContext.reviewWeight} onWeightChange={weightContext.setReviewWeight} > <Reviews /></Slider>
+        <Slider content='Response Rate' value={weightContext.responseWeight} onWeightChange={weightContext.setResponseWeight} > <HourglassTop /></Slider>
+        <Slider content='Extension Flexibility' value={weightContext.flexibilityWeight} onWeightChange={weightContext.setFlexibilityWeight} > <CalendarMonth /></Slider>
       </Box>
     </DrawerWrapper >
   );

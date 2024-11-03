@@ -32,7 +32,7 @@ export function getMaxCloseness(
   return maxCloseness;
 }
 
-export function getHomeScore(home: Home, sortingContext: SortingContext) {
+function getHomeScore(home: Home, sortingContext: SortingContext) {
   if (sortingContext.selectedLocation === null)
     return 0;
 
@@ -54,9 +54,6 @@ function moreDesirableThan(
 
 // Swap function
 function swapHomes(homes: Home[], i: number, j: number) {
-  console.log(homes);
-  console.log(i);
-  console.log(j);
   let temp = homes[i];
   homes[i] = homes[j];
   homes[j] = temp;

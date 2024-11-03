@@ -7,7 +7,7 @@ import APIMap from './Map/APIMap';
 
 import data from 'data/database.json'
 import { Home, WeightContext } from 'shared/lib/types';
-import { getMaxCloseness, quickSort, getHomeScore } from 'utils/quickSort';
+import { getMaxCloseness, quickSort } from 'utils/quickSort';
 
 function Wrapper() {
   const [selectedLocation, setSelectedLocation] = React.useState<google.maps.GeocoderGeometry | null>(null);

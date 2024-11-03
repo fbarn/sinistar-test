@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
-import { DataGrid, GridRowsProp, GridColDef, GridEventListener } from '@mui/x-data-grid';
+import { Box } from '@mui/material';
 
 import { AdvancedMarker, ControlPosition, Map, MapControl, Pin, useMap, useAdvancedMarkerRef } from '@vis.gl/react-google-maps';
 import { Home } from 'shared/lib/types';
+import MapTable from './MapTable';
 
 
 interface APIMapProps {
@@ -15,8 +15,10 @@ function APIMap({ geometry, homes }: APIMapProps) {
 
   const map = useMap()
   const [markerRef, marker] = useAdvancedMarkerRef();
+  const [rowGeometry, setRowGeometry] = React.useState<google.maps.GeocoderGeometry | null>(null);
 
   React.useEffect(() => {
+    console.log("Activated effect to zoom onto searched address.")
     if (!map || !geometry || !marker) return;
 
     if (geometry?.viewport) {
@@ -28,21 +30,15 @@ function APIMap({ geometry, homes }: APIMapProps) {
     }
   }, [map, geometry, marker]);
 
+  React.useEffect(() => {
+    console.log("Activated effect to zoom onto selected row.")
+    if (!map || !rowGeometry) return;
 
-  const columns: GridColDef[] = [
-    { field: 'name', headerName: 'Name', width: 150 },
-    { field: 'address', headerName: 'Address', width: 150 },
-    { field: 'review_score', headerName: 'Review Score', width: 150 },
-  ];
+    if (rowGeometry?.viewport) {
+      map.fitBounds(rowGeometry?.viewport);
+    }
+  }, [map, rowGeometry]);
 
-  const rows = React.useMemo(() => {
-    return homes.map(({ id, name, address, review_score }) => ({
-      id,
-      name,
-      address,
-      review_score,
-    }));
-  }, [homes]);
 
   return (
     <Box
@@ -58,42 +54,15 @@ function APIMap({ geometry, homes }: APIMapProps) {
         disableDefaultUI={true}
       >
         <MapControl position={ControlPosition.LEFT_TOP}>
-          <Box
-            width={{ xs: '95vw', lg: '600px', xl: '800px' }}
-            height={{ xs: 0, xl: '80vh' }}
-            m={'10px'}>
-
-            <Box width="100%" flexGrow="1">
-              <Card >
-                <CardContent>
-                  <Box mx="15px" mt="10px" mb="20px">
-                    <Typography
-                      variant="h5"
-                      component="div"
-                      fontWeight={'bold'}
-                    >
-                      Hosts
-                    </Typography>
-                  </Box>
-
-                  <Box m="10px" flexGrow="1" height={{ xs: '50vh', xl: '85%' }}>
-                    <DataGrid rows={rows}
-                      disableColumnMenu
-                      disableColumnResize
-                      disableColumnSorting
-                      columns={columns} />
-                  </Box>
-                </CardContent>
-              </Card>
-            </Box>
-          </Box>
+          <MapTable onRowClick={setRowGeometry} homes={homes} />
         </MapControl>
 
         <AdvancedMarker key={'my_home'} ref={markerRef} position={null} />
-        {homes?.map(({ latitude, longitude, id }) => (
+        {homes?.map(({ address, city, name, latitude, longitude, id }) => (
           <AdvancedMarker
             key={id}
             position={{ lat: latitude, lng: longitude }}
+            title={`${name}\n${address}\n${city}`}
           >
             <Pin
               background={'#edcc1f'}

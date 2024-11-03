@@ -18,7 +18,7 @@ const SearchWrapper = styled('div')(({ theme }) => ({
   marginLeft: 0,
   width: '100%',
   [theme.breakpoints.up('xl')]: {
-    width: '30%',
+    width: '33%',
   },
   [theme.breakpoints.down('xl')]: {
     width: '50%',
@@ -55,8 +55,9 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
 
 
   const fetchPlaces = React.useMemo(
-    () =>
-      debounce(
+    () => {
+      console.log("Fetching places for autocomplete.")
+      return debounce(
         (
           request: { input: string },
           callback: (results?: readonly google.maps.places.AutocompletePrediction[]) => void,
@@ -64,14 +65,17 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
           (autocompleteService.current as any).getPlacePredictions(
             request,
             callback,
-          );
+          ).catch((e: any) => {
+            console.log('Failed to load places for autocomplete: ' + e);
+          });
         },
         400,
-      ),
-    [],
+      )
+    }, [],
   );
 
   React.useEffect(() => {
+    console.log("Activated effect for input change.")
     let active = true;
 
     if (!autocompleteService.current && places !== null) {
@@ -108,8 +112,9 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
   }, [value, inputValue, fetchPlaces, places]);
 
   const fetchGeocode = React.useMemo(
-    () =>
-      debounce(
+    () => {
+      console.log("Fetching geocode for search result.");
+      return debounce(
         (
           request: { placeId: string },
           callback: (results?: readonly google.maps.GeocoderResult[]) => void,
@@ -117,14 +122,16 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
           (geocodeService.current as any).geocode(
             request,
             callback,
-          );
+          ).catch((e: any) => {
+            console.log('Failed to get geocode: ' + e);
+          });
         },
         400,
-      ),
-    [],
-  );
+      )
+    }, [],);
 
   React.useEffect(() => {
+    console.log("Activated effect for value change.")
     let active = true;
 
     if (!geocodeService.current && geocoding !== null) {

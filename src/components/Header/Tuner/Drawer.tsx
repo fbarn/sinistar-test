@@ -22,7 +22,7 @@ const DrawerWrapper: React.FC<DrawerWrapperProps> = ({ open, onClose, children }
       sx={{
         flexShrink: 0,
         '& .MuiDrawer-paper': {
-          width: { xs: '100%', sm: '100%', md: '50%', lg: '33%' },
+          width: { xs: '100%', sm: '100%', md: '50%', xl: '33%' },
         },
       }}
       PaperProps={{

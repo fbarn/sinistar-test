@@ -135,6 +135,7 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
     }
 
     if (value === null) {
+      onSearchChange(null);
       return undefined;
     }
 

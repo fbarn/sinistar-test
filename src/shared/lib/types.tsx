@@ -20,3 +20,11 @@ export interface Home {
   review_score: number;
   extension_flexibility: number;
 }
+
+export interface SortingContext {
+  selectedLocation: google.maps.GeocoderGeometry | null,
+  distanceWeight: number,
+  reviewWeight: number,
+  responseWeight: number,
+  flexibilityWeight: number,
+}

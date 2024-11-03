@@ -7,9 +7,10 @@ import APIMap from './Map/APIMap';
 
 import data from 'data/database.json'
 import { Home, WeightContext } from 'shared/lib/types';
+import { getMaxCloseness, quickSort, getHomeScore } from 'utils/quickSort';
 
 function Wrapper() {
-  const [location, setLocation] = React.useState<google.maps.GeocoderGeometry | null>(null);
+  const [selectedLocation, setSelectedLocation] = React.useState<google.maps.GeocoderGeometry | null>(null);
   const [distanceWeight, setDistanceWeight] = React.useState<number>(50);
   const [reviewWeight, setReviewWeight] = React.useState<number>(50);
   const [responseWeight, setResponseWeight] = React.useState<number>(50);
@@ -25,16 +26,42 @@ function Wrapper() {
     setFlexibilityWeight: setFlexibilityWeight,
   }
   const [homes, setHomes] = React.useState<Home[]>(data)
+  const sortHomes = () => {
+    if (selectedLocation === null)
+      return;
+    quickSort(homes, {
+      selectedLocation: selectedLocation,
+      distanceWeight: distanceWeight / getMaxCloseness(homes, selectedLocation),
+      reviewWeight: reviewWeight / 5,
+      responseWeight: responseWeight,
+      flexibilityWeight: flexibilityWeight,
+    });
+    setHomes([...homes]);
+    // for (let i = 0; i < homes.length; i++) {
+    //   console.log(homes[i]);
+    //   console.log(getHomeScore(homes[i], {
+    //     selectedLocation: selectedLocation,
+    //     distanceWeight: distanceWeight / getMaxCloseness(homes, selectedLocation),
+    //     reviewWeight: reviewWeight / 5,
+    //     responseWeight: responseWeight,
+    //     flexibilityWeight: flexibilityWeight,
+    //   }));
+    // }
+    // console.log(homes);
+    // console.log(weightContext);
+  }
   return (
     <div>
       <Header
         height='64px'
-        onSearchChange={setLocation}
-        weightContext={weightContext} />
+        weightContext={weightContext}
+        disabled={selectedLocation === null}
+        onSort={sortHomes}
+        onSearchChange={setSelectedLocation} />
       <Box
         height='calc(100%-64px)'
       >
-        <APIMap homes={homes} geometry={location} />
+        <APIMap homes={homes} geometry={selectedLocation} />
       </Box>
     </div>
   );

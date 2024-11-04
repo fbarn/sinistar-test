@@ -19,9 +19,13 @@ If the above steps are completed, running `npm start` will runn the development 
 
 ## Features
 Weight selection is done by clicking on the slider at the top right of the screen.
+
 User home is inputted by the search bar at the top left. Doing this adds a red marker to the map, and zooms to its vicinity.
+
 Available homes are visible on the map as yellow markers. They are also listed in the dropdown below the header.
+
 If you click on a home on that table, the map will zoom onto its corresponding marker.
+
 Hovering your mouse over one of the yellow markers will reveal the owner name and address of the corresponding home.
 
 ## Sorting algorithm

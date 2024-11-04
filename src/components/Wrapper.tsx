@@ -1,20 +1,21 @@
-import React from 'react';
+import { useState } from "react";
 
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 
-import Header from './Header/Header';
-import APIMap from './Map/APIMap';
+import Header from "./Header/Header";
+import APIMap from "./Map/APIMap";
 
-import data from 'data/database.json'
-import { Home, WeightContext } from 'shared/lib/types';
-import { getMaxDistance, quickSort } from 'utils/quickSort';
+import data from "data/database.json";
+import { Home, WeightContext } from "shared/lib/types";
+import { getMaxDistance, quickSort } from "utils/quickSort";
 
 function Wrapper() {
-  const [selectedLocation, setSelectedLocation] = React.useState<google.maps.GeocoderGeometry | null>(null);
-  const [distanceWeight, setDistanceWeight] = React.useState<number>(50);
-  const [reviewWeight, setReviewWeight] = React.useState<number>(50);
-  const [responseWeight, setResponseWeight] = React.useState<number>(50);
-  const [flexibilityWeight, setFlexibilityWeight] = React.useState<number>(50);
+  const [selectedLocation, setSelectedLocation] =
+    useState<google.maps.GeocoderGeometry | null>(null);
+  const [distanceWeight, setDistanceWeight] = useState<number>(50);
+  const [reviewWeight, setReviewWeight] = useState<number>(50);
+  const [responseWeight, setResponseWeight] = useState<number>(50);
+  const [flexibilityWeight, setFlexibilityWeight] = useState<number>(50);
   const weightContext: WeightContext = {
     distanceWeight: distanceWeight,
     setDistanceWeight: setDistanceWeight,
@@ -24,11 +25,10 @@ function Wrapper() {
     setResponseWeight: setResponseWeight,
     flexibilityWeight: flexibilityWeight,
     setFlexibilityWeight: setFlexibilityWeight,
-  }
-  const [homes, setHomes] = React.useState<Home[]>(data)
+  };
+  const [homes, setHomes] = useState<Home[]>(data);
   const sortHomes = () => {
-    if (selectedLocation === null)
-      return;
+    if (selectedLocation === null) return;
     quickSort(homes, {
       selectedLocation: selectedLocation,
       maxDistance: getMaxDistance(homes, selectedLocation),
@@ -38,30 +38,17 @@ function Wrapper() {
       flexibilityWeight: flexibilityWeight,
     });
     setHomes([...homes]);
-    // for (let i = 0; i < homes.length; i++) {
-    //   console.log(homes[i]);
-    //   console.log(getHomeScore(homes[i], {
-    //     selectedLocation: selectedLocation,
-    //     distanceWeight: distanceWeight / getMaxCloseness(homes, selectedLocation),
-    //     reviewWeight: reviewWeight / 5,
-    //     responseWeight: responseWeight,
-    //     flexibilityWeight: flexibilityWeight,
-    //   }));
-    // }
-    // console.log(homes);
-    // console.log(weightContext);
-  }
+  };
   return (
     <div>
       <Header
-        height='64px'
+        height="64px"
         weightContext={weightContext}
         disabled={selectedLocation === null}
         onSort={sortHomes}
-        onSearchChange={setSelectedLocation} />
-      <Box
-        height='calc(100%-64px)'
-      >
+        onSearchChange={setSelectedLocation}
+      />
+      <Box height="calc(100%-64px)">
         <APIMap homes={homes} geometry={selectedLocation} />
       </Box>
     </div>

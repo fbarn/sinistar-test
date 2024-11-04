@@ -1,18 +1,17 @@
-import * as React from 'react';
+import { useState } from "react";
 
-import { Box, IconButton } from '@mui/material'
-import { Tune } from '@mui/icons-material';
-import Drawer from './Drawer';
+import { Box, IconButton } from "@mui/material";
+import { Tune } from "@mui/icons-material";
+import Drawer from "./Drawer";
 
-import { WeightContext } from 'shared/lib/types';
-
+import { WeightContext } from "shared/lib/types";
 
 interface TunerProps {
   weightContext: WeightContext;
 }
 
 function TunerIcon({ weightContext }: TunerProps) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -31,8 +30,12 @@ function TunerIcon({ weightContext }: TunerProps) {
           <Tune />
         </IconButton>
       </Box>
-      <Drawer open={open} toggleDrawer={toggleDrawer} weightContext={weightContext} />
-    </div >
+      <Drawer
+        open={open}
+        toggleDrawer={toggleDrawer}
+        weightContext={weightContext}
+      />
+    </div>
   );
 }
 

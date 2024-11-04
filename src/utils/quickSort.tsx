@@ -1,66 +1,86 @@
-import type { Home, SortingContext } from 'shared/lib/types'
+import type { Home, SortingContext } from "shared/lib/types";
 
-function getDistance(
-  lat1: number,
-  lng1: number,
-  lat2: number,
-  lng2: number) {
-  let R = 3958.8; // Radius of the Earth in miles
-  let rlat1 = lat1 * (Math.PI / 180); // Convert degrees to radians
-  let rlat2 = lat2 * (Math.PI / 180); // Convert degrees to radians
-  let difflat = rlat2 - rlat1; // Radian difference (latitudes)
-  let difflon = (lng2 - lng1) * (Math.PI / 180); // Radian difference (longitudes)
+function getDistance(lat1: number, lng1: number, lat2: number, lng2: number) {
+  const R = 3958.8; // Radius of the Earth in miles
+  const rlat1 = lat1 * (Math.PI / 180); // Convert degrees to radians
+  const rlat2 = lat2 * (Math.PI / 180); // Convert degrees to radians
+  const difflat = rlat2 - rlat1; // Radian difference (latitudes)
+  const difflon = (lng2 - lng1) * (Math.PI / 180); // Radian difference (longitudes)
 
-  let d = 2 * R * Math.asin(
-    Math.sqrt(
-      Math.sin(difflat / 2) * Math.sin(difflat / 2) +
-      Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)
-    ));
+  const d =
+    2 *
+    R *
+    Math.asin(
+      Math.sqrt(
+        Math.sin(difflat / 2) * Math.sin(difflat / 2) +
+          Math.cos(rlat1) *
+            Math.cos(rlat2) *
+            Math.sin(difflon / 2) *
+            Math.sin(difflon / 2),
+      ),
+    );
   return d;
 }
 
 export function getMaxDistance(
   homes: Home[],
-  selectedLocation: google.maps.GeocoderGeometry
+  selectedLocation: google.maps.GeocoderGeometry,
 ) {
-  let selectedLat = selectedLocation.location.lat();
-  let selectedLng = selectedLocation.location.lng();
+  const selectedLat = selectedLocation.location.lat();
+  const selectedLng = selectedLocation.location.lng();
   let maxCloseness = 0;
   for (let i = 0; i < homes.length; i++) {
-    maxCloseness = Math.max(maxCloseness, getDistance(homes[i].latitude, homes[i].longitude, selectedLat, selectedLng))
+    maxCloseness = Math.max(
+      maxCloseness,
+      getDistance(
+        homes[i].latitude,
+        homes[i].longitude,
+        selectedLat,
+        selectedLng,
+      ),
+    );
   }
   return maxCloseness;
 }
 
 function getCloseness(home: Home, sortingContext: SortingContext) {
-
-  if (sortingContext.selectedLocation === null || sortingContext.maxDistance === 0)
+  if (
+    sortingContext.selectedLocation === null ||
+    sortingContext.maxDistance === 0
+  )
     return 0;
 
-  let selectedLat = sortingContext.selectedLocation.location.lat();
-  let selectedLng = sortingContext.selectedLocation.location.lng();
-  return 1 - (getDistance(home.latitude, home.longitude, selectedLat, selectedLng) / sortingContext.maxDistance)
+  const selectedLat = sortingContext.selectedLocation.location.lat();
+  const selectedLng = sortingContext.selectedLocation.location.lng();
+  return (
+    1 -
+    getDistance(home.latitude, home.longitude, selectedLat, selectedLng) /
+      sortingContext.maxDistance
+  );
 }
 
 function getHomeScore(home: Home, sortingContext: SortingContext) {
-
-  return sortingContext.distanceWeight * getCloseness(home, sortingContext) +
-    sortingContext.reviewWeight * (home.review_score) +
+  return (
+    sortingContext.distanceWeight * getCloseness(home, sortingContext) +
+    sortingContext.reviewWeight * home.review_score +
     sortingContext.responseWeight * home.host_response_rate +
-    sortingContext.flexibilityWeight * home.extension_flexibility;
+    sortingContext.flexibilityWeight * home.extension_flexibility
+  );
 }
 
 function moreDesirableThan(
   home1: Home,
   home2: Home,
-  sortingContext: SortingContext) {
-
-  return getHomeScore(home1, sortingContext) > getHomeScore(home2, sortingContext);
+  sortingContext: SortingContext,
+) {
+  return (
+    getHomeScore(home1, sortingContext) > getHomeScore(home2, sortingContext)
+  );
 }
 
 // Swap function
 function swapHomes(homes: Home[], i: number, j: number) {
-  let temp = homes[i];
+  const temp = homes[i];
   homes[i] = homes[j];
   homes[j] = temp;
 }
@@ -69,9 +89,9 @@ function partitionHomes(
   homes: Home[],
   low: number,
   high: number,
-  sortingContext: SortingContext) {
-
-  let pivot = homes[high];
+  sortingContext: SortingContext,
+) {
+  const pivot = homes[high];
 
   // Index of smaller element and indicates
   // the right position of pivot found so far
@@ -94,11 +114,15 @@ function partitionHomes(
 }
 
 // The QuickSort function implementation
-function quickSortHomes(homes: Home[], low: number, high: number, sortingContext: SortingContext) {
+function quickSortHomes(
+  homes: Home[],
+  low: number,
+  high: number,
+  sortingContext: SortingContext,
+) {
   if (low < high) {
-
     // pi is the partition return index of pivot
-    let pi = partitionHomes(homes, low, high, sortingContext);
+    const pi = partitionHomes(homes, low, high, sortingContext);
 
     // Recursion calls for smaller elements
     // and greater or equals elements
@@ -108,8 +132,5 @@ function quickSortHomes(homes: Home[], low: number, high: number, sortingContext
 }
 
 export function quickSort(homes: Home[], sortingContext: SortingContext) {
-
   return quickSortHomes(homes, 0, homes.length - 1, sortingContext);
-
 }
-

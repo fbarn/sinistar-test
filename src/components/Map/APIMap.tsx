@@ -1,10 +1,17 @@
-import React from 'react';
-import { Box } from '@mui/material';
+import { useEffect, useState } from "react";
+import { Box } from "@mui/material";
 
-import { AdvancedMarker, ControlPosition, Map, MapControl, Pin, useMap, useAdvancedMarkerRef } from '@vis.gl/react-google-maps';
-import { Home } from 'shared/lib/types';
-import MapTable from './MapTable';
-
+import {
+  AdvancedMarker,
+  ControlPosition,
+  Map,
+  MapControl,
+  Pin,
+  useMap,
+  useAdvancedMarkerRef,
+} from "@vis.gl/react-google-maps";
+import { Home } from "shared/lib/types";
+import MapTable from "./MapTable";
 
 interface APIMapProps {
   geometry: google.maps.GeocoderGeometry | null;
@@ -12,13 +19,13 @@ interface APIMapProps {
 }
 
 function APIMap({ geometry, homes }: APIMapProps) {
-
-  const map = useMap()
+  const map = useMap();
   const [markerRef, marker] = useAdvancedMarkerRef();
-  const [rowGeometry, setRowGeometry] = React.useState<google.maps.GeocoderGeometry | null>(null);
+  const [rowGeometry, setRowGeometry] =
+    useState<google.maps.GeocoderGeometry | null>(null);
 
-  React.useEffect(() => {
-    console.log("Activated effect to zoom onto searched address.")
+  useEffect(() => {
+    console.log("Activated effect to zoom onto searched address.");
     if (!map || !geometry || !marker) return;
 
     if (geometry?.viewport) {
@@ -30,8 +37,8 @@ function APIMap({ geometry, homes }: APIMapProps) {
     }
   }, [map, geometry, marker]);
 
-  React.useEffect(() => {
-    console.log("Activated effect to zoom onto selected row.")
+  useEffect(() => {
+    console.log("Activated effect to zoom onto selected row.");
     if (!map || !rowGeometry) return;
 
     if (rowGeometry?.viewport) {
@@ -39,25 +46,24 @@ function APIMap({ geometry, homes }: APIMapProps) {
     }
   }, [map, rowGeometry]);
 
-
   return (
     <Box
-      position={'absolute'}
-      sx={{ top: 0, bottom: 0, left: 0, right: 0, zIndex: -1 }}>
-
+      position={"absolute"}
+      sx={{ top: 0, bottom: 0, left: 0, right: 0, zIndex: -1 }}
+    >
       <Map
-        mapId={'663505692a16ecbb'}
+        mapId={"663505692a16ecbb"}
         defaultCenter={{ lat: 45.0019088, lng: -76.2177276 }}
         minZoom={4}
         defaultZoom={6}
-        gestureHandling={'greedy'}
+        gestureHandling={"greedy"}
         disableDefaultUI={true}
       >
         <MapControl position={ControlPosition.LEFT_TOP}>
           <MapTable onRowClick={setRowGeometry} homes={homes} />
         </MapControl>
 
-        <AdvancedMarker key={'my_home'} ref={markerRef} position={null} />
+        <AdvancedMarker key={"my_home"} ref={markerRef} position={null} />
         {homes?.map(({ address, city, name, latitude, longitude, id }) => (
           <AdvancedMarker
             key={id}
@@ -65,15 +71,15 @@ function APIMap({ geometry, homes }: APIMapProps) {
             title={`${name}\n${address}\n${city}`}
           >
             <Pin
-              background={'#edcc1f'}
-              glyphColor={'#000'}
-              borderColor={'#000'}
+              background={"#edcc1f"}
+              glyphColor={"#000"}
+              borderColor={"#000"}
             />
           </AdvancedMarker>
         ))}
       </Map>
-    </Box >
-  )
+    </Box>
+  );
 }
 
 export default APIMap;

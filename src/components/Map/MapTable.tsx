@@ -27,6 +27,7 @@ function MapTable({ homes, disabled, onRowClick, onSort }: MapTableProps) {
   const geocodeService = useRef(null as any);
 
   const [value, setValue] = useState<google.maps.LatLng | null>(null);
+  const [expanded, setExpanded] = useState<boolean>(false);
   const geocoding = useMapsLibrary("geocoding");
 
   const columns: GridColDef[] = [
@@ -97,6 +98,7 @@ function MapTable({ homes, disabled, onRowClick, onSort }: MapTableProps) {
         }
       },
     );
+    setExpanded(false);
 
     return () => {
       active = false;
@@ -110,7 +112,10 @@ function MapTable({ homes, disabled, onRowClick, onSort }: MapTableProps) {
       marginLeft={{ xs: "2vw", md: "20vw", lg: "25vw", xl: "15px" }}
     >
       <Box width="100%" flexGrow="1" sx={{ borderRadius: 0 }}>
-        <Accordion>
+        <Accordion
+          expanded={expanded}
+          onChange={(e, expanded) => setExpanded(expanded)}
+        >
           <AccordionSummary expandIcon={<ArrowDownward />}>
             <Typography>Available Hosts</Typography>
           </AccordionSummary>

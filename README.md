@@ -1,15 +1,15 @@
 # Sinistar Technical Test
 
 <p align="center">
-<img src="./image-desktop" height="500"/>
+<img src="./image-desktop.png" height="500"/>
 </p>
 
 <p align="center">
-<img src="./image-mobile" height="500"/>
+<img src="./image-mobile.png" height="500"/>
 </p>
 
 <p align="center">
-<img src="./image-tablet" height="500"/>
+<img src="./image-tablet.png" height="500"/>
 </p>
 
 =======

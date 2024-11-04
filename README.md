@@ -34,9 +34,12 @@ The available candidate homes are sorted using a basic implementation of the qui
 ## Host scoring
 The hosts are scored using a weighted sum of their 4 criteria scores. The weights are assigned by the user input. 
 The criteria scores are normalized on a scale from 0 to 1. This is done so that they could be weighted fairly according to the inputted weights.
+
 The response and flexibility scores are already normalized in this way. They could therefore be used as-is.
+
 The review score spans 0 to 5. We can therefore normalize it simply by dividing it by 5.
-The distance score requires more thought... 
+
+For computing a distance score I chose to score them linearly on a line of best fit. This was done by finding the farthest distance among the hosts, and assigning it a score of 0; and finding the closest distance, and assigning it a score of 1. I then obtained the line passing through both these points as a slope-intercept pair, which in turn was used to compute the score of all remaining homes. 
 
 # Getting Started with Create React App
 

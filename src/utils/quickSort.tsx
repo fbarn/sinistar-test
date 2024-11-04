@@ -19,7 +19,7 @@ function getDistance(lat1: number, lng1: number, lat2: number, lng2: number) {
   );
   return d;
 }
-
+// Iterates over all homes, and runs getDistance to find the maximum distance
 function getMaxDistance(
   homes: Home[],
   selectedLocation: google.maps.GeocoderGeometry,
@@ -39,6 +39,7 @@ function getMaxDistance(
   return maxDistance;
 }
 
+// Iterates over all homes, and runs getDistance to find the minimum distance
 function getMinDistance(
   homes: Home[],
   selectedLocation: google.maps.GeocoderGeometry,
@@ -58,12 +59,17 @@ function getMinDistance(
   return minDistance;
 }
 
+// Returns the slope and intercept of the line that fits the max and min distances,
+// mapped to 0 and 1 respectively.
 function getFitFromDistances(maxDistance: number, minDistance: number) {
   const slope = 1 / (minDistance - maxDistance);
   const intercept = 1 - slope * minDistance;
   return { slope, intercept };
 }
 
+// Returns the slope and intercept of the line that fits the max and min distances
+// of the homes to the selected location. This lineare fit will be used to determine
+// closeness of homes to the selected location.
 export function getLinearFitFromHomes(
   homes: Home[],
   selectedLocation: google.maps.GeocoderGeometry,
@@ -73,6 +79,7 @@ export function getLinearFitFromHomes(
   return getFitFromDistances(maxDistance, minDistance);
 }
 
+// Determines closeness by plugging in the home's lat-lng pair into the linear fit equation found in getLinearFitFromHomes.
 function getCloseness(home: Home, sortingContext: SortingContext) {
   if (sortingContext.selectedLocation === null) return 0;
 

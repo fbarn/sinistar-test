@@ -13,7 +13,7 @@
 </p>
 
 =======
-# Dependencies
+## Dependencies
 This project uses Node.js version `20.16.0`.
 All other dependencies will be installed locally in the next step.
 You will also need a working google maps API key. This can be obtained [here](https://developers.google.com/maps/documentation/javascript/get-api-key)
@@ -27,7 +27,7 @@ After obtaining an API KEY, assign it the environment variable `REACT_APP_GOOGLE
 `REACT_APP_GOOGLE_MAPS_API_KEY=<key_value>`
 
 ## Running
-If the above steps are completed, running `npm start` will runn the development server on `localhost:3000`.
+If the above steps are completed, running `npm start` will run the development server on `localhost:3000`.
 
 ## Features
 Weight selection is done by clicking on the slider at the top right of the screen.

@@ -1,35 +1,41 @@
 # Sinistar Technical Test
 
 <p align="center">
-<img src="./image-desktop.png" height="500"/>
+<img src="./images/image-desktop.png" height="500"/>
 </p>
 
 <p align="center">
-<img src="./image-mobile.png" height="500"/>
+<img src="./images/image-mobile.png" height="500"/>
 </p>
 
 <p align="center">
-<img src="./image-tablet.png" height="500"/>
+<img src="./images/image-tablet.png" height="500"/>
 </p>
 
 =======
+
 ## Dependencies
+
 This project uses Node.js version `20.16.0`.
 All other dependencies will be installed locally in the next step.
 You will also need a working google maps API key. This can be obtained [here](https://developers.google.com/maps/documentation/javascript/get-api-key)
 
 ## Installation
+
 After installing an appropriate version of Node.js, and cloning into the repositoty, simply run:
 `npm i`
 
 ## API key
+
 After obtaining an API KEY, assign it the environment variable `REACT_APP_GOOGLE_MAPS_API_KEY`. This can be done by having a `.env` file at the root of the project with contents:
 `REACT_APP_GOOGLE_MAPS_API_KEY=<key_value>`
 
 ## Running
+
 If the above steps are completed, running `npm start` will run the development server on `localhost:3000`.
 
 ## Features
+
 Weight selection is done by clicking on the slider at the top right of the screen.
 
 User home is inputted by the search bar at the top left. Doing this adds a red marker to the map, and zooms to its vicinity.
@@ -41,17 +47,19 @@ If you click on a home on that table, the map will zoom onto its corresponding m
 Hovering your mouse over one of the yellow markers will reveal the owner name and address of the corresponding home.
 
 ## Sorting algorithm
+
 The available candidate homes are sorted using a basic implementation of the quicksort algorithm.
 
 ## Host scoring
-The hosts are scored using a weighted sum of their 4 criteria scores. The weights are assigned by the user input. 
+
+The hosts are scored using a weighted sum of their 4 criteria scores. The weights are assigned by the user input.
 The criteria scores are normalized on a scale from 0 to 1. This is done so that they could be weighted fairly according to the inputted weights.
 
 The response and flexibility scores are already normalized in this way. They could therefore be used as-is.
 
 The review score spans 0 to 5. We can therefore normalize it simply by dividing it by 5.
 
-For computing a distance score I chose to score them linearly on a line of best fit. This was done by finding the farthest distance among the hosts, and assigning it a score of 0; and finding the closest distance, and assigning it a score of 1. I then obtained the line passing through both these points as a slope-intercept pair, which in turn was used to compute the score of all remaining homes. 
+For computing a distance score I chose to score them linearly on a line of best fit. This was done by finding the farthest distance among the hosts, and assigning it a score of 0; and finding the closest distance, and assigning it a score of 1. I then obtained the line passing through both these points as a slope-intercept pair, which in turn was used to compute the score of all remaining homes.
 
 # Getting Started with Create React App
 

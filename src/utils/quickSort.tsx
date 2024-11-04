@@ -1,6 +1,6 @@
 import type { Home, SortingContext } from 'shared/lib/types'
 
-function getCloseness(
+function getDistance(
   lat1: number,
   lng1: number,
   lat2: number,
@@ -16,10 +16,10 @@ function getCloseness(
       Math.sin(difflat / 2) * Math.sin(difflat / 2) +
       Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)
     ));
-  return 1 / d;
+  return d;
 }
 
-export function getMaxCloseness(
+export function getMaxDistance(
   homes: Home[],
   selectedLocation: google.maps.GeocoderGeometry
 ) {
@@ -27,18 +27,24 @@ export function getMaxCloseness(
   let selectedLng = selectedLocation.location.lng();
   let maxCloseness = 0;
   for (let i = 0; i < homes.length; i++) {
-    maxCloseness = Math.max(maxCloseness, getCloseness(homes[i].latitude, homes[i].longitude, selectedLat, selectedLng))
+    maxCloseness = Math.max(maxCloseness, getDistance(homes[i].latitude, homes[i].longitude, selectedLat, selectedLng))
   }
   return maxCloseness;
 }
 
-function getHomeScore(home: Home, sortingContext: SortingContext) {
-  if (sortingContext.selectedLocation === null)
+function getCloseness(home: Home, sortingContext: SortingContext) {
+
+  if (sortingContext.selectedLocation === null || sortingContext.maxDistance === 0)
     return 0;
 
   let selectedLat = sortingContext.selectedLocation.location.lat();
   let selectedLng = sortingContext.selectedLocation.location.lng();
-  return sortingContext.distanceWeight * getCloseness(home.latitude, home.longitude, selectedLat, selectedLng) +
+  return 1 - (getDistance(home.latitude, home.longitude, selectedLat, selectedLng) / sortingContext.maxDistance)
+}
+
+function getHomeScore(home: Home, sortingContext: SortingContext) {
+
+  return sortingContext.distanceWeight * getCloseness(home, sortingContext) +
     sortingContext.reviewWeight * (home.review_score) +
     sortingContext.responseWeight * home.host_response_rate +
     sortingContext.flexibilityWeight * home.extension_flexibility;

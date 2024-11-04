@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Box, Button, Divider, Drawer, Grid2, IconButton, Toolbar, Typography } from '@mui/material'
+import { Box, Divider, Drawer, IconButton, Toolbar, Typography } from '@mui/material'
 import { CalendarMonth, ChevronRight, HourglassTop, Reviews, Straighten } from '@mui/icons-material';
 
 import Slider from './Slider';

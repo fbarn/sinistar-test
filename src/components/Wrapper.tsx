@@ -7,7 +7,7 @@ import APIMap from './Map/APIMap';
 
 import data from 'data/database.json'
 import { Home, WeightContext } from 'shared/lib/types';
-import { getMaxCloseness, quickSort } from 'utils/quickSort';
+import { getMaxDistance, quickSort } from 'utils/quickSort';
 
 function Wrapper() {
   const [selectedLocation, setSelectedLocation] = React.useState<google.maps.GeocoderGeometry | null>(null);
@@ -31,7 +31,8 @@ function Wrapper() {
       return;
     quickSort(homes, {
       selectedLocation: selectedLocation,
-      distanceWeight: distanceWeight / getMaxCloseness(homes, selectedLocation),
+      maxDistance: getMaxDistance(homes, selectedLocation),
+      distanceWeight: distanceWeight,
       reviewWeight: reviewWeight / 5,
       responseWeight: responseWeight,
       flexibilityWeight: flexibilityWeight,

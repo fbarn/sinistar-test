@@ -23,6 +23,7 @@ export interface Home {
 
 export interface SortingContext {
   selectedLocation: google.maps.GeocoderGeometry | null,
+  maxDistance: number,
   distanceWeight: number,
   reviewWeight: number,
   responseWeight: number,

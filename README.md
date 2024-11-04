@@ -1,5 +1,17 @@
 # Sinistar Technical Test
 
+<p align="center">
+<img src="./image-desktop" height="500"/>
+</p>
+
+<p align="center">
+<img src="./image-mobile" height="500"/>
+</p>
+
+<p align="center">
+<img src="./image-tablet" height="500"/>
+</p>
+
 =======
 # Dependencies
 This project uses Node.js version `20.16.0`.

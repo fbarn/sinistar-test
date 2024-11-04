@@ -25,6 +25,8 @@ interface DrawerWithWeightTunerParamsProps {
   children: ReactNode;
 }
 
+// The tuner menu is just an implementation of a MUI Drawer.
+// Here is just its underlying structure.
 const DrawerWithWeightTunerParams: FC<DrawerWithWeightTunerParamsProps> = ({
   open,
   onClose,
@@ -60,17 +62,20 @@ interface WeightTunerProps {
   weightContext: WeightContext;
 }
 
+// The weight selector functionality. Takes as props a WeightContext object
+// which represents the set of weights to be considered, as well as their corresponding
+// setters. Creates a Slider object for each of these weight-setter pairs
 function WeightTuner({
   open,
-  toggleWeightTuner: toggleDrawer,
+  toggleWeightTuner,
   weightContext,
 }: WeightTunerProps) {
   return (
-    <DrawerWithWeightTunerParams open={open} onClose={toggleDrawer(false)}>
+    <DrawerWithWeightTunerParams open={open} onClose={toggleWeightTuner(false)}>
       <Box sx={{ flexGrow: 1, width: "100%" }}>
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <Typography variant="h6">Adjust Criteria Weights</Typography>
-          <IconButton onClick={toggleDrawer(false)}>
+          <IconButton onClick={toggleWeightTuner(false)}>
             <ChevronRight />
           </IconButton>
         </Toolbar>

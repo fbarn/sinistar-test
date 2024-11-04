@@ -14,33 +14,41 @@ import { Home } from "shared/lib/types";
 import MapTable from "./MapTable";
 
 interface APIMapProps {
-  geometry: google.maps.GeocoderGeometry | null;
+  searchGeometry: google.maps.GeocoderGeometry | null;
   homes: Home[];
   disabled: boolean;
   onSort: () => void;
 }
 
-function APIMap({ geometry, homes, disabled, onSort }: APIMapProps) {
+// The main map component. Contains the map itself, a marker for the
+// searched home, as well as markers for all homes in db.
+// Container for the table containing available homes.
+// Receives the searched location and homes from the parent.
+function APIMap({ searchGeometry, homes, disabled, onSort }: APIMapProps) {
   const map = useMap();
   const [markerRef, marker] = useAdvancedMarkerRef();
   const [rowGeometry, setRowGeometry] =
     useState<google.maps.GeocoderGeometry | null>(null);
 
+  // Triggered by search change.
+  // Will add a marker to the corresponding location,
+  // and perform a not-so-deep zoom on that location
   useEffect(() => {
-    console.log("Activated effect to zoom onto searched address.");
-    if (!map || !geometry || !marker) return;
+    if (!map || !searchGeometry || !marker) return;
 
-    if (geometry?.viewport) {
-      map.fitBounds(geometry?.viewport);
+    if (searchGeometry?.viewport) {
+      map.fitBounds(searchGeometry?.viewport);
       map.setZoom(12);
     }
-    if (geometry?.location) {
-      marker.position = geometry?.location;
+    if (searchGeometry?.location) {
+      marker.position = searchGeometry?.location;
     }
-  }, [map, geometry, marker]);
+  }, [map, searchGeometry, marker]);
 
+  // Triggered by a row in the table being clicked.
+  // Will perform a deep zoom onto the location
+  // corresponding to the row
   useEffect(() => {
-    console.log("Activated effect to zoom onto selected row.");
     if (!map || !rowGeometry) return;
 
     if (rowGeometry?.viewport) {

@@ -23,9 +23,14 @@ export interface Home {
 
 export interface SortingContext {
   selectedLocation: google.maps.GeocoderGeometry | null;
-  maxDistance: number;
+  linearFitParameters: LinearFitParameters;
   distanceWeight: number;
   reviewWeight: number;
   responseWeight: number;
   flexibilityWeight: number;
+}
+
+export interface LinearFitParameters {
+  slope: number;
+  intercept: number;
 }

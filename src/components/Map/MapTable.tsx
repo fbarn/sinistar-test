@@ -35,8 +35,8 @@ function MapTable({ homes, disabled, onRowClick, onSort }: MapTableProps) {
     { field: "review_score", headerName: "Review Score", width: 110 },
   ];
 
+  // Triggered by home sorting. Will update values in the table.
   const rows = useMemo(() => {
-    console.log("Updating tables");
     return homes.map(
       ({ id, name, address, review_score, latitude, longitude }) => ({
         id,
@@ -53,8 +53,8 @@ function MapTable({ homes, disabled, onRowClick, onSort }: MapTableProps) {
     setValue(new google.maps.LatLng(params.row.latitude, params.row.longitude));
   };
 
+  // Geocode functionality used to get location information on the clicked row.
   const fetchGeocode = useMemo(() => {
-    console.log("Fetching geocode for selected row.");
     return debounce(
       (
         request: { location: google.maps.LatLng },
@@ -70,9 +70,9 @@ function MapTable({ homes, disabled, onRowClick, onSort }: MapTableProps) {
     );
   }, []);
 
+  // Triggered by a row being clicked. Leads to the parent changing focus.
   useEffect(() => {
     let active = true;
-    console.log("Activated effect for rowClick.");
 
     if (!geocodeService.current && geocoding !== null) {
       geocodeService.current = new geocoding.Geocoder();
@@ -132,7 +132,13 @@ function MapTable({ homes, disabled, onRowClick, onSort }: MapTableProps) {
             </Box>
 
             <Box marginY={3}></Box>
-            <Tooltip title={disabled ? "Please enter an address" : ""}>
+            <Tooltip
+              title={
+                disabled
+                  ? "Sorting requires an address and one non-zero weight."
+                  : ""
+              }
+            >
               <span>
                 <Button
                   variant="contained"

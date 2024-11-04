@@ -11,6 +11,9 @@ interface HeaderProps {
   onSearchChange: (coords: google.maps.GeocoderGeometry | null) => void;
 }
 
+// Basic wrapper for the header contents, as well as the components that come from them.
+// Contains the search bar, tuner button, and tuner. Passes the weights and searched location
+// to the parent.
 function Header({ height, weightContext, onSearchChange }: HeaderProps) {
   return (
     <Box height={height} sx={{ flexGrow: 1 }}>

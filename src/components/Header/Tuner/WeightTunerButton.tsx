@@ -10,6 +10,7 @@ interface WeightTunerButtonProps {
   weightContext: WeightContext;
 }
 
+// Component for the tuner button. Clicking it makes the tuner menu appear.
 function WeightTunerButton({ weightContext }: WeightTunerButtonProps) {
   const [open, setOpen] = useState(false);
 

@@ -7,8 +7,11 @@ import APIMap from "./Map/APIMap";
 
 import data from "data/database.json";
 import { Home, WeightContext } from "shared/lib/types";
-import { getMaxDistance, quickSort } from "utils/quickSort";
+import { getLinearFitFromHomes, quickSort } from "utils/quickSort";
 
+// Container for the entire application.
+// Has for children the header and the map itself.
+// Used to relay information to and from these children.
 function Dashboard() {
   const [selectedLocation, setSelectedLocation] =
     useState<google.maps.GeocoderGeometry | null>(null);
@@ -31,7 +34,7 @@ function Dashboard() {
     if (selectedLocation === null) return;
     quickSort(homes, {
       selectedLocation: selectedLocation,
-      maxDistance: getMaxDistance(homes, selectedLocation),
+      linearFitParameters: getLinearFitFromHomes(homes, selectedLocation),
       distanceWeight: distanceWeight,
       reviewWeight: reviewWeight / 5,
       responseWeight: responseWeight,
@@ -49,8 +52,15 @@ function Dashboard() {
       <Box height="calc(100%-64px)">
         <APIMap
           homes={homes}
-          geometry={selectedLocation}
-          disabled={selectedLocation === null}
+          searchGeometry={selectedLocation}
+          disabled={
+            selectedLocation === null ||
+            distanceWeight +
+              reviewWeight +
+              flexibilityWeight +
+              responseWeight ===
+              0
+          }
           onSort={sortHomes}
         />
       </Box>

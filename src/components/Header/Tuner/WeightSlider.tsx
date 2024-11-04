@@ -53,6 +53,7 @@ interface WeightSliderProps {
   onWeightChange: (weight: number) => void;
 }
 
+// A single weight slider. Used to change the value of one weight.
 function WeightSlider({
   content,
   children,

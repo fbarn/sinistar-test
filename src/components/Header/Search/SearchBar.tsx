@@ -42,6 +42,10 @@ interface SearchBarProps {
   onSearchChange: (coords: google.maps.GeocoderGeometry | null) => void;
 }
 
+// Functionality for the search bar
+// Uses the google maps AutocompleteService
+// Passes the corresponding location to the parent so it
+// could get used in the map and for sorting the candidate homes
 function SearchBar({ onSearchChange }: SearchBarProps) {
   const autocompleteService = useRef(null as any);
   const geocodeService = useRef(null as any);
@@ -55,8 +59,8 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
   const places = useMapsLibrary("places");
   const geocoding = useMapsLibrary("geocoding");
 
+  // Load the autocomplete service
   const fetchPlaces = useMemo(() => {
-    console.log("Fetching places for autocomplete.");
     return debounce(
       (
         request: { input: string },
@@ -74,8 +78,10 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
     );
   }, []);
 
+  // Triggered by a change in the search input (any keystroke)
+  // determines suggestions based on this input, and passes them to
+  // the user as a grid element.
   useEffect(() => {
-    console.log("Activated effect for input change.");
     let active = true;
 
     if (!autocompleteService.current && places !== null) {
@@ -115,8 +121,9 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
     };
   }, [value, inputValue, fetchPlaces, places]);
 
+  // Load the geocode service
+  // Used for determining the location of an autocomplete result
   const fetchGeocode = useMemo(() => {
-    console.log("Fetching geocode for search result.");
     return debounce(
       (
         request: { placeId: string },
@@ -132,8 +139,11 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
     );
   }, []);
 
+  // Triggered by a suggestion being filterSelected
+  // Passes the suggestion in the geocode service to determine
+  // its location. This location then gets passed to the parent
+  // to change the state of the map.
   useEffect(() => {
-    console.log("Activated effect for value change.");
     let active = true;
 
     if (!geocodeService.current && geocoding !== null) {

@@ -3,16 +3,16 @@ import { ChangeEvent, ReactNode } from "react";
 import { Box, Grid2, Input, Slider, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const InputWrapper = styled(Input)(({ theme }) => ({
+const InputWithWeightSliderStyle = styled(Input)(({ theme }) => ({
   padding: theme.spacing(0, 0, 0, 0),
   width: 55,
 }));
 
-const IconWrapper = styled("div")(({ theme }) => ({
+const IconWithWeightSliderStyle = styled("div")(({ theme }) => ({
   padding: theme.spacing(1.1, 0, 0, 0),
 }));
 
-const SliderWrapper = styled(Slider)(({ theme }) => ({
+const SliderWithWeightSliderStyle = styled(Slider)(({ theme }) => ({
   color: theme.palette.primary.main,
   height: 5,
   padding: "15px 0",
@@ -46,19 +46,19 @@ const SliderWrapper = styled(Slider)(({ theme }) => ({
   },
 }));
 
-interface WrappedSliderProps {
+interface WeightSliderProps {
   content: string;
   children?: ReactNode;
   value: number;
   onWeightChange: (weight: number) => void;
 }
 
-function WrappedSlider({
+function WeightSlider({
   content,
   children,
   value,
   onWeightChange,
-}: WrappedSliderProps) {
+}: WeightSliderProps) {
   const handleSliderChange = (_event: Event, newValue: number | number[]) => {
     onWeightChange(newValue as number);
   };
@@ -80,17 +80,17 @@ function WrappedSlider({
       <Typography gutterBottom>{content}</Typography>
       <Grid2 container spacing={2} size={10}>
         <Grid2 size={1}>
-          <IconWrapper>{children}</IconWrapper>
+          <IconWithWeightSliderStyle>{children}</IconWithWeightSliderStyle>
         </Grid2>
         <Grid2 size={10}>
-          <SliderWrapper
+          <SliderWithWeightSliderStyle
             valueLabelDisplay="auto"
             value={typeof value === "number" ? value : 50}
             onChange={handleSliderChange}
           />
         </Grid2>
         <Grid2 size={1}>
-          <InputWrapper
+          <InputWithWeightSliderStyle
             value={value}
             size="small"
             onChange={handleInputChange}
@@ -108,4 +108,4 @@ function WrappedSlider({
     </Box>
   );
 }
-export default WrappedSlider;
+export default WeightSlider;

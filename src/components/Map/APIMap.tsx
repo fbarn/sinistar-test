@@ -16,9 +16,11 @@ import MapTable from "./MapTable";
 interface APIMapProps {
   geometry: google.maps.GeocoderGeometry | null;
   homes: Home[];
+  disabled: boolean;
+  onSort: () => void;
 }
 
-function APIMap({ geometry, homes }: APIMapProps) {
+function APIMap({ geometry, homes, disabled, onSort }: APIMapProps) {
   const map = useMap();
   const [markerRef, marker] = useAdvancedMarkerRef();
   const [rowGeometry, setRowGeometry] =
@@ -60,7 +62,12 @@ function APIMap({ geometry, homes }: APIMapProps) {
         disableDefaultUI={true}
       >
         <MapControl position={ControlPosition.LEFT_TOP}>
-          <MapTable onRowClick={setRowGeometry} homes={homes} />
+          <MapTable
+            onRowClick={setRowGeometry}
+            homes={homes}
+            disabled={disabled}
+            onSort={onSort}
+          />
         </MapControl>
 
         <AdvancedMarker key={"my_home"} ref={markerRef} position={null} />

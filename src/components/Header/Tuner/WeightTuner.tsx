@@ -16,16 +16,20 @@ import {
   Straighten,
 } from "@mui/icons-material";
 
-import Slider from "./Slider";
+import WeightSlider from "./WeightSlider";
 import { WeightContext } from "shared/lib/types";
 
-interface DrawerWrapperProps {
+interface DrawerWithWeightTunerParamsProps {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
 }
 
-const DrawerWrapper: FC<DrawerWrapperProps> = ({ open, onClose, children }) => {
+const DrawerWithWeightTunerParams: FC<DrawerWithWeightTunerParamsProps> = ({
+  open,
+  onClose,
+  children,
+}) => {
   return (
     <Drawer
       anchor="right"
@@ -50,19 +54,19 @@ const DrawerWrapper: FC<DrawerWrapperProps> = ({ open, onClose, children }) => {
   );
 };
 
-interface WrappedDrawerProps {
+interface WeightTunerProps {
   open: boolean;
-  toggleDrawer: (newOpen: boolean) => () => void;
+  toggleWeightTuner: (newOpen: boolean) => () => void;
   weightContext: WeightContext;
 }
 
-function WrappedDrawer({
+function WeightTuner({
   open,
-  toggleDrawer,
+  toggleWeightTuner: toggleDrawer,
   weightContext,
-}: WrappedDrawerProps) {
+}: WeightTunerProps) {
   return (
-    <DrawerWrapper open={open} onClose={toggleDrawer(false)}>
+    <DrawerWithWeightTunerParams open={open} onClose={toggleDrawer(false)}>
       <Box sx={{ flexGrow: 1, width: "100%" }}>
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <Typography variant="h6">Adjust Criteria Weights</Typography>
@@ -73,40 +77,40 @@ function WrappedDrawer({
       </Box>
       <Divider />
       <Box sx={{ mx: 3, my: 3 }}>
-        <Slider
+        <WeightSlider
           content="Distance from Current Home"
           value={weightContext.distanceWeight}
           onWeightChange={weightContext.setDistanceWeight}
         >
           <Straighten />
-        </Slider>
-        <Slider
+        </WeightSlider>
+        <WeightSlider
           content="Review Score"
           value={weightContext.reviewWeight}
           onWeightChange={weightContext.setReviewWeight}
         >
           {" "}
           <Reviews />
-        </Slider>
-        <Slider
+        </WeightSlider>
+        <WeightSlider
           content="Response Rate"
           value={weightContext.responseWeight}
           onWeightChange={weightContext.setResponseWeight}
         >
           {" "}
           <HourglassTop />
-        </Slider>
-        <Slider
+        </WeightSlider>
+        <WeightSlider
           content="Extension Flexibility"
           value={weightContext.flexibilityWeight}
           onWeightChange={weightContext.setFlexibilityWeight}
         >
           {" "}
           <CalendarMonth />
-        </Slider>
+        </WeightSlider>
       </Box>
-    </DrawerWrapper>
+    </DrawerWithWeightTunerParams>
   );
 }
 
-export default WrappedDrawer;
+export default WeightTuner;

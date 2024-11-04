@@ -1,3 +1,4 @@
+import { Button, Tooltip } from "@mui/material";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
@@ -17,10 +18,12 @@ import { Home } from "shared/lib/types";
 
 interface MapTableProps {
   homes: Home[];
+  disabled: boolean;
   onRowClick: (coords: google.maps.GeocoderGeometry | null) => void;
+  onSort: () => void;
 }
 
-function MapTable({ homes, onRowClick }: MapTableProps) {
+function MapTable({ homes, disabled, onRowClick, onSort }: MapTableProps) {
   const geocodeService = useRef(null as any);
 
   const [value, setValue] = useState<google.maps.LatLng | null>(null);
@@ -60,7 +63,7 @@ function MapTable({ homes, onRowClick }: MapTableProps) {
         (geocodeService.current as any)
           .geocode(request, callback)
           .catch((e: any) => {
-            console.log("Failed to load geocode for selected row: " + e);
+            console.error("Failed to load geocode for selected row: " + e);
           });
       },
       400,
@@ -103,10 +106,10 @@ function MapTable({ homes, onRowClick }: MapTableProps) {
   return (
     <Box
       width={{ xs: "96vw", md: "60vw", lg: "50vw", xl: "690px" }}
-      marginTop={{ xs: "61px", sm: "70px" }}
-      marginLeft={{ xs: "2vw", md: "20vw", lg: "25vw", xl: "5px" }}
+      marginTop={{ xs: "69px", sm: "80px" }}
+      marginLeft={{ xs: "2vw", md: "20vw", lg: "25vw", xl: "15px" }}
     >
-      <Box borderRadius={0} width="100%" flexGrow="1" sx={{ borderRadius: 0 }}>
+      <Box width="100%" flexGrow="1" sx={{ borderRadius: 0 }}>
         <Accordion>
           <AccordionSummary expandIcon={<ArrowDownward />}>
             <Typography>Available Hosts</Typography>
@@ -127,6 +130,20 @@ function MapTable({ homes, onRowClick }: MapTableProps) {
                 onRowClick={handleRowClick}
               />
             </Box>
+
+            <Box marginY={3}></Box>
+            <Tooltip title={disabled ? "Please enter an address" : ""}>
+              <span>
+                <Button
+                  variant="contained"
+                  onClick={onSort}
+                  disabled={disabled}
+                  style={disabled ? { pointerEvents: "none" } : {}}
+                >
+                  Sort Candidates
+                </Button>
+              </span>
+            </Tooltip>
           </AccordionDetails>
         </Accordion>
       </Box>

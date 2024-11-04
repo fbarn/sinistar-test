@@ -9,7 +9,7 @@ import data from "data/database.json";
 import { Home, WeightContext } from "shared/lib/types";
 import { getMaxDistance, quickSort } from "utils/quickSort";
 
-function Wrapper() {
+function Dashboard() {
   const [selectedLocation, setSelectedLocation] =
     useState<google.maps.GeocoderGeometry | null>(null);
   const [distanceWeight, setDistanceWeight] = useState<number>(50);
@@ -44,15 +44,18 @@ function Wrapper() {
       <Header
         height="64px"
         weightContext={weightContext}
-        disabled={selectedLocation === null}
-        onSort={sortHomes}
         onSearchChange={setSelectedLocation}
       />
       <Box height="calc(100%-64px)">
-        <APIMap homes={homes} geometry={selectedLocation} />
+        <APIMap
+          homes={homes}
+          geometry={selectedLocation}
+          disabled={selectedLocation === null}
+          onSort={sortHomes}
+        />
       </Box>
     </div>
   );
 }
 
-export default Wrapper;
+export default Dashboard;

@@ -1,24 +1,20 @@
 import type { Home, SortingContext } from "shared/lib/types";
 
 function getDistance(lat1: number, lng1: number, lat2: number, lng2: number) {
-  const R = 3958.8; // Radius of the Earth in miles
   const rlat1 = lat1 * (Math.PI / 180); // Convert degrees to radians
   const rlat2 = lat2 * (Math.PI / 180); // Convert degrees to radians
   const difflat = rlat2 - rlat1; // Radian difference (latitudes)
   const difflon = (lng2 - lng1) * (Math.PI / 180); // Radian difference (longitudes)
 
-  const d =
-    2 *
-    R *
-    Math.asin(
-      Math.sqrt(
-        Math.sin(difflat / 2) * Math.sin(difflat / 2) +
-          Math.cos(rlat1) *
-            Math.cos(rlat2) *
-            Math.sin(difflon / 2) *
-            Math.sin(difflon / 2),
-      ),
-    );
+  const d = Math.asin(
+    Math.sqrt(
+      Math.sin(difflat / 2) * Math.sin(difflat / 2) +
+        Math.cos(rlat1) *
+          Math.cos(rlat2) *
+          Math.sin(difflon / 2) *
+          Math.sin(difflon / 2),
+    ),
+  );
   return d;
 }
 
@@ -28,10 +24,10 @@ export function getMaxDistance(
 ) {
   const selectedLat = selectedLocation.location.lat();
   const selectedLng = selectedLocation.location.lng();
-  let maxCloseness = 0;
+  let maxDistance = 0;
   for (let i = 0; i < homes.length; i++) {
-    maxCloseness = Math.max(
-      maxCloseness,
+    maxDistance = Math.max(
+      maxDistance,
       getDistance(
         homes[i].latitude,
         homes[i].longitude,
@@ -40,7 +36,7 @@ export function getMaxDistance(
       ),
     );
   }
-  return maxCloseness;
+  return maxDistance;
 }
 
 function getCloseness(home: Home, sortingContext: SortingContext) {
@@ -93,27 +89,18 @@ function partitionHomes(
 ) {
   const pivot = homes[high];
 
-  // Index of smaller element and indicates
-  // the right position of pivot found so far
   let i = low - 1;
 
-  // Traverse arr[low..high] and move all smaller
-  // elements to the left side. Elements from low to
-  // i are smaller after every iteration
   for (let j = low; j <= high - 1; j++) {
     if (moreDesirableThan(homes[j], pivot, sortingContext)) {
       i++;
       swapHomes(homes, i, j);
     }
   }
-
-  // Move pivot after smaller elements and
-  // return its position
   swapHomes(homes, i + 1, high);
   return i + 1;
 }
 
-// The QuickSort function implementation
 function quickSortHomes(
   homes: Home[],
   low: number,
@@ -121,11 +108,8 @@ function quickSortHomes(
   sortingContext: SortingContext,
 ) {
   if (low < high) {
-    // pi is the partition return index of pivot
     const pi = partitionHomes(homes, low, high, sortingContext);
 
-    // Recursion calls for smaller elements
-    // and greater or equals elements
     quickSortHomes(homes, low, pi - 1, sortingContext);
     quickSortHomes(homes, pi + 1, high, sortingContext);
   }

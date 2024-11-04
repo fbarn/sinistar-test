@@ -7,7 +7,7 @@ import { LocationOn, Search } from "@mui/icons-material";
 
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 
-const SearchWrapper = styled("div")(({ theme }) => ({
+const SearchBarStyler = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.black, 0.1),
@@ -28,7 +28,7 @@ const SearchWrapper = styled("div")(({ theme }) => ({
   },
 }));
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
+const SearchIconStyler = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: "100%",
   position: "absolute",
@@ -67,7 +67,7 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
         (autocompleteService.current as any)
           .getPlacePredictions(request, callback)
           .catch((e: any) => {
-            console.log("Failed to load places for autocomplete: " + e);
+            console.error("Failed to load places for autocomplete: " + e);
           });
       },
       400,
@@ -125,7 +125,7 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
         (geocodeService.current as any)
           .geocode(request, callback)
           .catch((e: any) => {
-            console.log("Failed to get geocode: " + e);
+            console.error("Failed to get geocode: " + e);
           });
       },
       400,
@@ -167,10 +167,10 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
   }, [onSearchChange, value, fetchGeocode, geocoding]);
 
   return (
-    <SearchWrapper>
-      <SearchIconWrapper>
+    <SearchBarStyler>
+      <SearchIconStyler>
         <Search />
-      </SearchIconWrapper>
+      </SearchIconStyler>
       <Autocomplete
         getOptionLabel={(option) => option.description}
         filterOptions={(x) => x}
@@ -222,7 +222,7 @@ function SearchBar({ onSearchChange }: SearchBarProps) {
           );
         }}
       />
-    </SearchWrapper>
+    </SearchBarStyler>
   );
 }
 

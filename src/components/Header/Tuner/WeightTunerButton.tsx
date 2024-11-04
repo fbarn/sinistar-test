@@ -2,18 +2,18 @@ import { useState } from "react";
 
 import { Box, IconButton } from "@mui/material";
 import { Tune } from "@mui/icons-material";
-import Drawer from "./Drawer";
+import WeightTuner from "./WeightTuner";
 
 import { WeightContext } from "shared/lib/types";
 
-interface TunerProps {
+interface WeightTunerButtonProps {
   weightContext: WeightContext;
 }
 
-function TunerIcon({ weightContext }: TunerProps) {
+function WeightTunerButton({ weightContext }: WeightTunerButtonProps) {
   const [open, setOpen] = useState(false);
 
-  const toggleDrawer = (newOpen: boolean) => () => {
+  const toggleWeightTuner = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
 
@@ -25,18 +25,18 @@ function TunerIcon({ weightContext }: TunerProps) {
           edge="start"
           color="inherit"
           aria-label="open drawer"
-          onClick={toggleDrawer(true)}
+          onClick={toggleWeightTuner(true)}
         >
           <Tune />
         </IconButton>
       </Box>
-      <Drawer
+      <WeightTuner
         open={open}
-        toggleDrawer={toggleDrawer}
+        toggleWeightTuner={toggleWeightTuner}
         weightContext={weightContext}
       />
     </div>
   );
 }
 
-export default TunerIcon;
+export default WeightTunerButton;
